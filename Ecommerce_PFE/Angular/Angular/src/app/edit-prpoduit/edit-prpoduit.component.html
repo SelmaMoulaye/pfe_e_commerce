@@ -1,0 +1,32 @@
+
+
+<form [formGroup]="produitedit" (ngSubmit)="onSubmit()" novalidate>
+    <div class="mb-3">
+        <label class="form-label">Nom</label>
+        <input type="text" class="form-control" formControlName="nom" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Categorie</label>
+        <input type="text" class="form-control" formControlName="categorie" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <input type="text" class="form-control" formControlName="description" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Prix</label>
+        <input type="number" class="form-control" formControlName="prix" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Stock Disponible</label>
+        <input type="text" class="form-control" formControlName="stock_disponible" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Date Ajoutée</label>
+        <input type="date" class="form-control" formControlName="date_ajouter" required>
+    </div>
+    <input type="submit" value="Update" class="btn btn-info">
+    <input type="reset" value="retour" class="btn btn-info">
+
+</form> 
+

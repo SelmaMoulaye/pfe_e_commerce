@@ -1,0 +1,40 @@
+<div class="col-md-8 mt-2">
+  <h5 class="text-danger"> Produit List</h5>
+  <div class="card p-3 shadow">
+      <div class="card-body">
+          <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">id</th>
+                  <th scope="col">nom</th>
+                  <th scope="col">categorie</th>
+                  <th scope="col">description</th>
+                  <th scope="col">prix</th>
+                  <th scope="col">stock_disponible</th>
+                  <th scope="col">date_ajouter</th>
+                  <th scope="col">Action</th>
+               
+                </tr>
+              </thead>
+              <tbody>
+              
+                <tr *ngFor="let produit of produits">
+                  <td >{{produit.id}}</td>
+                  <td >{{produit.nom}}</td>
+                  <td>{{produit.categorie}}</td>
+                  <td>{{produit.description}}</td>
+                  <td>{{produit.prix}}</td>
+                  <td>{{produit.stock_disponible}}</td>
+                  <td>{{produit.date_ajouter}}</td>
+                 
+                  <td> 
+                    <span routerLink="/update-produit/{{produit.id}}"class="btn btn-outline-primary"> Edit </span>
+                  <button class="btn btn-outline-danger" (click)="deleteProduct(produit.id)">Delete</button>
+            
+                  </td>
+
+                </tr>
+              </tbody>
+            </table>
+      </div>
+  </div> 

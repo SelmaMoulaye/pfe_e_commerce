@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produits</title>
+</head>
+<body>
+    <h1>Liste des Produits</h1>
+  
+       <p>Categorie: {{ produit_categorie }}</p>
+    <p>Nom: {{produit_name}}</p>
+    <p>Prix: {{produit_prix}}</p>
+    <p>discription: {{discription}}</p>
+
+</body>
+</html>
+
+
+
+import json
+from django.shortcuts import render
+from django.http import HttpResponse, JsonResponse
+from django.urls import path
+from emoji import STATUS
+from flask import Response
+
+
+from . import views  # Assurez-vous que le point indique que vous importez depuis le même répertoire
+from django.contrib import admin
+from django.urls import path
+import pyrebase
+from django.contrib.auth.models import User, Group
+from rest_framework import viewsets
+#from .serializers import MovieSerializer, MovieMiniSerializer
+# Initialize Firebase (move credentials to environment variables)
+#from .models import Produit
+from rest_framework.views import APIView
+
+config = {
+     'apiKey': "AIzaSyBj_igi4p34adf9TCz4cbKgOfwGj9cue2s",
+      'authDomain': "projetfinmaster-6fc29.firebaseapp.com",
+      'databaseURL':'https://projetfinmaster-6fc29-default-rtdb.firebaseio.com/',
+      'projectId': "projetfinmaster-6fc29",
+      'storageBucket': "projetfinmaster-6fc29.appspot.com",
+      'messagingSenderId': "668117584806",
+      'appId': "1:668117584806:web:395429b354040745bf9d67",
+      'measurementId': "G-8HJRMS4QN7"
+}
+# Initialize Pyrebase
+firebase = pyrebase.initialize_app(config)
+auth = firebase.auth()
+database = firebase.database()
+from rest_framework import generics
+from .models import Produit
+from .serializers import MonModeleSerializer
+
+class MonModeleListCreate(viewsets.ModelViewSet):
+    queryset = Produit.objects.all()
+    serializer_class = MonModeleSerializer
+#@api_view(['GET'])
+def product_list(self, request, *args, **kwargs):
+   # products = Produit.objects.all()
+    #data = [{'name': product.nom, 'price': product.prix} for product in products]
+   # return JsonResponse(data, safe=False
+    produits = Produit.objects.all()
+    serializer = MonModeleSerializer(produits, many=True)
+    return Response(serializer.data)
+
+
+'''class ProductListView(APIView):
+  def get_produit(self, request):
+        try:
+            # Récupérer la liste des produits depuis la base de données Firebase
+            products_data = database.child("Produit").get().val()
+
+            # Traiter les données pour les rendre utilisables dans la réponse
+            products_list = []
+            if products_data:
+                for product_info in products_data.items():
+                    # Ajouter chaque produit à la liste avec son ID
+                    #product_info['id'] = product_id
+                    products_list.append(product_info)
+
+            # Retourner la liste des produits dans la réponse
+            return Response({'products': products_list}, status=Status.HTTP_200_OK)
+        except Exception as e:
+            # En cas d'erreur, renvoyer un message d'erreur avec le code 500
+            return Response({'message': str(e)}, status=STATUS.HTTP_500_INTERNAL_SERVER_ERROR)'''
+
+
+def firebase_data(request):
+    # Récupérer les données de Firebase
+    products_data = database.child("Produit").get().val()
+
+    # Créer des instances de modèle à partir des données Firebase
+    products = [Produit(**data) for data in firebase_data]
+ 
+    # Sérialiser les instances de modèle en JSON
+    serializer = MonModeleSerializer(products, many=True)
+
+    # Renvoyer les données sérialisées en réponse
+    return JsonResponse(serializer.data, safe=False)
+    def get_data_from_firebase():
+    ref = database.reference('data')
+    return ref.get()
+
+@csrf_exempt
+@api_view(['GET'])
+def get_data(request):
+     produits = get_data_from_firebase()
+     serializer = MonModeleSerializer(produits, many=True)
+     return JsonResponse(serializer.data, safe=False)
+
+''''def get_products_from_firebase(request):
+    products_ref = database.collection('Produit')
+    products = [doc.to_dict() for doc in products_ref.stream()]
+    return JsonResponse(products, safe=False)'''
+
+
+@csrf_exempt
+@api_view(['GET'])
+def get_all_products(request):
+    products = Produit(database.child("Produit").get().val())
+    serializer = MonModeleSerializer(products, many=True)
+    return Response(serializer.data)
+
+@csrf_exempt
+@api_view(['GET'])
+def get_all_products(request):
+    # Récupérer les données depuis Firebase
+    produits_data = database.child("Produit").get().val()
+    # Traiter les données et créer des instances de modèle Produit
+    produits = []
+    for produit_id, produit_info in produits_data.items():
+        produit = Produit(
+           # id=produit_id,
+            name=produit_info.get('categorie'),
+            price=produit_info.get('nom'),
+            description=produit_info.get('prix')
+        )
+        produits.append(produit)
+
+    # Sérialiser les instances de modèle Produit
+    serializer = MonModeleSerializer(produits, many=True)
+    
+    # Renvoyer la réponse
+    return Response(serializer.data)
+

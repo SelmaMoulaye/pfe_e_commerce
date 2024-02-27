@@ -1,0 +1,30 @@
+
+<form (ngSubmit)="createProduct()" #loginForm="ngForm">
+    <input type="number" name="id" [(ngModel)]="id" appAutoId>
+        <div>
+          <input type="text"  name="nom" [(ngModel)]="nom">
+          <label>Nom</label>
+      </div>   <br>
+      <div>
+          <input type="text" name="categorie" [(ngModel)]="categorie">
+          <label >Categorie</label>
+      </div> <br>
+      <div>
+          <input type="email" name="description" [(ngModel)]="description">
+          <label >Description</label> 
+      </div>  <br>
+      <div>
+          <input type="number" name="prix" [(ngModel)]="prix">
+          <label >Prix</label>
+      </div> <br>
+      <div>
+          <input type="number" name="stock_disponible" [(ngModel)]="stock_disponible">
+          <label>Stock Disponible</label>
+      </div>  <br>
+      <div>
+          <input type="date" name="date_ajouter" [(ngModel)]="date_ajouter">
+          <label >Date d'ahat</label>
+      </div> <br>
+  <br>
+  <button type="submit">Se connecter</button>
+</form>
